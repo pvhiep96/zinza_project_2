@@ -1,0 +1,4 @@
+= form_for @post do |f|
+  .field
+    = f.text_area :content, placeholder: "Compose new post"
+  = f.submit "Post", class: "btn btn-primary"

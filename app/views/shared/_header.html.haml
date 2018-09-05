@@ -1,0 +1,14 @@
+.container
+  .row
+    .navbar
+      .header_nav
+        %a.navbar-brand
+        %ul.nav.nabar-nav.navbar-left
+          %li
+            %span.home= link_to "Home", root_path,class: "btn btn-link"
+          %li.search Search
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            %span.user_name= link_to current_user.name, edit_user_registration_path,class: "btn btn-link"
+          %li
+            %span.glyphicon.glyphicon-log-in= link_to t("logout"), destroy_user_session_path, method: 'delete'

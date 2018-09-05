@@ -1,0 +1,31 @@
+.container
+  .row
+    .signup_form
+      %h2 Sign up
+      = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+        = devise_error_messages!
+        .field
+          = f.text_field :name, class: "form-control", placeholder: "name"
+        %br/
+        .field
+          = f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "email"
+        %br/
+        .field
+          - if @minimum_password_length
+            %em
+              (#{@minimum_password_length} characters minimum)
+          %br/
+          = f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "password"
+        %br/
+        .field
+          = f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', placeholder: "password confirm"
+        %br/
+        .field
+          = f.label :avatar
+          = f.label :avatar do
+            = f.file_field :avatar, accept: 'image/jpeg,image/gif,image/png'
+            = f.hidden_field :avatar_cache
+        %br/
+        .actions
+          = f.submit "Sign up", class: "btn btn-primary"
+      = render "devise/shared/links"

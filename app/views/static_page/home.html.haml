@@ -1,0 +1,11 @@
+.container
+  .row
+    %aside.col-md-4
+      %section.user_info
+        = render 'shared/user_info'
+      %section.post_form
+        = render 'shared/post_form'
+    .col-md-8.posts
+      - current_user.posts.each do |f|
+        %li
+          = f.content

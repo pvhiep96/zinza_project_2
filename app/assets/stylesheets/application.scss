@@ -1,0 +1,137 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ * 
+ *= require_tree .
+ *= require_self
+ */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+ ul li{  
+  list-style: none !important;
+  float: left;
+  margin-right: 20px;
+}
+ul .navbar-right{
+  position: absolute
+}
+.navbar{
+  background-color: white
+}
+.navbar-left{
+  float: left;
+  margin-top: 15px;
+}
+.navbar-right{
+  float: right !important;
+  margin-top: 15px;
+}
+
+.header_nav{
+  color: #0092f5;
+}
+
+body{
+  background-color: #E4EBF0
+}
+
+.login_form{
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 150px;
+  width: 60%;
+  background-color: white;
+  padding-bottom: 10px;
+}
+
+.login_form input{
+  width: 60%;
+  border-radius: 150px
+}
+
+.signup_form{
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 150px;
+  width: 60%;
+  background-color: white;
+  padding-bottom: 10px;
+}
+
+.signup_form input{
+  width: 72%;
+  border-radius: 150px
+}
+
+.actions input{
+  width: 20%;
+  border-radius: 150px;
+}
+
+.remember{
+  margin-left: -222px;
+}
+
+.remember label{
+  margin-left: -222px;
+}
+
+.user_name a{
+  padding-top: 0px;
+}
+
+.home a{
+  padding-top: 0px !important;
+}
+
+.edit_form{
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 50px;
+  width: 60%;
+  background-color: white;
+  padding-bottom: 10px;
+}
+.edit_form input{
+  width: 72%;
+  border-radius: 150px
+}
+
+.forgot_pass_form{
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 50px;
+  width: 60%;
+  background-color: white;
+  padding-bottom: 10px;
+}
+.forgot_pass_form input{
+  width: 72%;
+  border-radius: 150px
+}
+
+.edit_pass_form{
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 50px;
+  width: 60%;
+  background-color: white;
+  padding-bottom: 10px;
+}
+.edit_pass_form input{
+  width: 72%;
+  border-radius: 150px
+}
