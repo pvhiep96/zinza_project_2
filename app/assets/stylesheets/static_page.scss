@@ -9,7 +9,9 @@
   padding: 0;
   li {
     padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
+    background-color: white;
+    margin-bottom: 10px;
+    width: 70%;
   }
   .user {
     margin-top: 5em;
@@ -28,7 +30,7 @@
     display: block;
     margin-left: 60px;
   }
-  // .gravatar {
+  // .avatar {
   //   float: left;
   //   margin-right: 10px;
   //   margin-top: 5px;

@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :user_signed_in?, only: [:destroy, :create]
+  before_action :set_post, only: [:destroy]
   def index
     @post = Post.all
   end
@@ -14,11 +15,11 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.build(post_params)
-    if @post.save
-      flash[:success] = "post create"
-      redirect_to root_url
-    else
-      render 'static_page/home'
+    @post.content = params[:post][:content]
+    @post.save
+    respond_to do |format|
+      format.js
+      format.json { render json: @post.to_json(only: [:content], methods: [:time_in_words]) }
     end
   end
 
@@ -26,9 +27,15 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    @post.destroy
+    render json: @post.to_json
   end
 
   private
+
+  def set_post
+    @post = Post.find_by(id: params[:id])
+  end
   
   def post_params
     params.require(:post).permit(:content)

@@ -1,5 +1,6 @@
 class StaticPageController < ApplicationController
   def home
-    @post = current_user.posts.build
+    @posts = current_user.posts
+    @post = Post.new(user: current_user)
   end
 end

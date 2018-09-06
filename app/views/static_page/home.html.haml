@@ -6,6 +6,11 @@
       %section.post_form
         = render 'shared/post_form'
     .col-md-8.posts
-      - current_user.posts.each do |f|
-        %li
-          = f.content
+      - @posts.each do |post|
+        %li.content_item
+          %span.content
+            = post.content
+          %span.timestamp
+            = time_ago_in_words(post.created_at)
+            ago.
+          %button.destroy-post{'data-id': "#{post.id}" } Delete
