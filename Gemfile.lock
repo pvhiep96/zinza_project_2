@@ -77,6 +77,9 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    carrierwave-base64 (2.7.0)
+      carrierwave (>= 0.8.0)
+      mime-types (~> 3.0)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (1.2.0)
@@ -107,12 +110,6 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
-    haml-rails (1.0.0)
-      actionpack (>= 4.0.1)
-      activesupport (>= 4.0.1)
-      haml (>= 4.0.6, < 6.0)
-      html2haml (>= 1.0.1)
-      railties (>= 4.0.1)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -270,11 +267,12 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   carrierwave
+  carrierwave-base64
   chromedriver-helper
   coffee-rails (~> 4.2)
   devise
   faker!
-  haml-rails (~> 1.0)
+  haml
   html2haml
   jbuilder (~> 2.5)
   jquery-rails

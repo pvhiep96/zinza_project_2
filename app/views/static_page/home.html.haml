@@ -7,10 +7,20 @@
         = render 'shared/post_form'
     .col-md-8.posts
       - @posts.each do |post|
+        .option-area
+          .option
+            %span.option_item
+            %span.option_item
+            %span.option_item
+          .option-menu
+            %li 
+              .destroy-post{'data-id': "#{post.id}" } Delete
+            %li Edit
         %li.content_item
           %span.content
             = post.content
           %span.timestamp
             = time_ago_in_words(post.created_at)
             ago.
-          %button.destroy-post{'data-id': "#{post.id}" } Delete
+      
+          

@@ -1,4 +1,7 @@
-= form_for @post do |f|
-  .field
-    = f.text_area :content, placeholder: "Compose new post"
-  = f.submit "Post", class: "btn btn-primary"
+#form_post
+  = form_for @post do |f|
+    .field
+      = f.text_area :content, placeholder: "Compose new post"
+      = f.fields_for :pictures do |p|
+        = p.file_field :picture_url, id: "file_button"
+    = f.submit "Post", class: "btn btn-primary post_form"

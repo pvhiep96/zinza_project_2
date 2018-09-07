@@ -15,23 +15,56 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
+function getBase64(file) {
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
+     console.log(reader.result);
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+   };
+}
+
 $(document).ready(function(){
+  
+  $(".option-menu").hide();
+  $(".option").click(function(){
+    $(this).next().toggle()
+  });
+  $(".container").mouseup(function(e){
+    var subject = $(".option-menu");
+    if(e.target.class != subject.attr("class")){
+      subject.hide();
+    }
+  })
+  
+  $(".option-menu").click(function(event){
+    event.stopPropagation();
+    $(".option-menu").hide();
+  })
+
   $("#new_post").submit(function(event){
     event.preventDefault();
+    var file = $("#file_button").prop('files')[0];
+    if(file != " "){
+      var base64_data = getBase64(file)
+    };
     action = $(this).attr('action');
     method = $(this).attr('method');
     content = $(this).find('textarea').val();
     $.ajax({
       type: method,
       url: action,
-      data: { post: {content: content}},
+      // pictures_attributes"=>{"0"=>{"picture_url"
+      data: { post: {content: content, pictures_attributes:{"0":{picture_url:{base64_data}}}}},
       dataType: 'json',
       success: function(data){
         $(':input[type="submit"]').prop('disabled', false);
-        var result = "<li>" + "<span class=\"content\">" + data.content + "</span>"+"<span class=\"timestamp\">"+ data.time_in_words + " "+"ago."+"</span>"+ "</li> "
+        var result = "<li class=\"content_item\">" + "<span class=\"content\">" + data.content + "</span>"+"<span class=\"timestamp\">"+ data.time_in_words + " "+"ago."+"</span>"+ "</li> "
         $('.posts').prepend(result);
         $('#post_content').val('');
-      }
+      },
     });
   });
   $(".destroy-post").click(function(event){
@@ -42,7 +75,8 @@ $(document).ready(function(){
       method: "DELETE",
       processData: true,
     }).success(function() {
-      $(this).closest("li").remove();
+      ($(this).closest(".option-area")).next(".content_item").remove();
+      debugger;
     }.bind(this))
   })
 });

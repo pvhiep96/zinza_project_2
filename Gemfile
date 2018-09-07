@@ -4,9 +4,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 gem 'devise'
 gem 'carrierwave'
+gem 'carrierwave-base64'
 gem 'mini_magick'
 gem 'html2haml'
-gem "haml-rails", "~> 1.0"
+gem 'haml'
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'sass-rails', '~> 5.0'
 gem 'kaminari'

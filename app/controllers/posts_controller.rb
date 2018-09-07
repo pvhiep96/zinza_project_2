@@ -14,12 +14,16 @@ class PostsController < ApplicationController
   end
 
   def create
+    
+    binding.pry
+    
     @post = current_user.posts.build(post_params)
-    @post.content = params[:post][:content]
+    # @post.content = params[:post][:content]
     @post.save
     respond_to do |format|
       format.js
-      format.json { render json: @post.to_json(only: [:content], methods: [:time_in_words]) }
+      format.json { render json: @post.to_json(only: [:content], methods: [:time_in_words])}
+
     end
   end
 
@@ -38,6 +42,6 @@ class PostsController < ApplicationController
   end
   
   def post_params
-    params.require(:post).permit(:content)
+    params.require(:post).permit(:content, pictures_attributes: %i[id picture_url _destroy])
   end
 end
