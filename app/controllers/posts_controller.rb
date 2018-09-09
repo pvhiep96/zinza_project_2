@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :user_signed_in?, only: [:destroy, :create]
-  before_action :set_post, only: [:destroy]
+  before_action :set_post, only: [:destroy, :show]
   def index
     @post = Post.all
   end
@@ -14,16 +14,13 @@ class PostsController < ApplicationController
   end
 
   def create
-    
-    binding.pry
-    
     @post = current_user.posts.build(post_params)
-    # @post.content = params[:post][:content]
     @post.save
     respond_to do |format|
       format.js
-      format.json { render json: @post.to_json(only: [:content], methods: [:time_in_words])}
-
+      format.html do
+        render '_post', layout: false, locals: {post: @post} 
+      end
     end
   end
 

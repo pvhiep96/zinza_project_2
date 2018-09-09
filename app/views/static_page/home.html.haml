@@ -22,5 +22,16 @@
           %span.timestamp
             = time_ago_in_words(post.created_at)
             ago.
-      
-          
+          %hr/
+          .comment-area
+            - post.comments.each do |comment|
+              %span.comment_item
+                .comment_detail
+                  = comment.user.name
+                  = comment.content
+                  .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+              %br
+          = form_for ([post, post.comments.build]) do |f|
+            = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"
+            .submit_comment
+              = f.submit 'Comment'
