@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_post, only: [:create]
-  before_action :find_comment, only: [:destroy]
+  before_action :find_post, only: [:create, :edit, :update]
+  before_action :find_comment, only: [:destroy, :edit, :update]
   def new
   end
 
@@ -23,9 +23,20 @@ class CommentsController < ApplicationController
   end
 
   def edit
+    respond_to do |format|
+      format.js
+      format.html do
+        render 'edit', layout: false, locals: {comment: @comment, post: @post}
+      end
+    end
   end
 
   def update
+    @comment.update_attributes (comment_params)
+    respond_to do |format|
+      format.js
+      format.json { render json: @comment.to_json(only: [:content]) }
+    end
   end
 
   def destroy

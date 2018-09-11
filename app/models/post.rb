@@ -5,6 +5,7 @@ class Post < ApplicationRecord
   validates :content, presence: true
   accepts_nested_attributes_for :pictures, allow_destroy: true
   default_scope -> { order(created_at: :desc) }
+  # mount_base64_uploader :picture_url, PictureUploader
   def time_in_words
     # TODO Parse time to year/month/week/date/hour
     # distance_minute = ((Time.now.getutc - created_at) / 60).round

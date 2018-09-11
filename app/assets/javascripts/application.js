@@ -22,7 +22,6 @@ function getBase64(file, onLoadCallback) {
       reader.onload = function() { resolve(reader.result); };
       reader.onerror = reject;
       reader.readAsDataURL(file);
-
   });
 }
 
@@ -39,7 +38,9 @@ $(document).ready(function(){
   $(document).on('click', ".option", function() {
     $(this).next().show()
   });
-
+  $( document ).on( 'focus', ':input', function(){
+    $( this ).attr( 'autocomplete', 'off' );
+});
   $(".container").mouseup(function(e){
     var subject = $(".option-menu");
     if(e.target.class != subject.attr("class")){
@@ -111,7 +112,65 @@ $(document).ready(function(){
       method: "DELETE",
       processData: true,
     }).success(function() {
-      ($(this).parent()).remove();
+      ($(this).closest(".comment_detail")).remove();
     }.bind(this))
   });
+
+  $(document).on('click', '.edit-post', function(event){
+    event.preventDefault();
+    // $(".post-area").hide();
+    var post_id = $(this).data("id");
+    $.ajax({
+      url: "posts/" + post_id + "/edit",
+      method: "GET",
+      dataType: 'html',
+      processData: true,
+    }).success(function(data){
+      $(this).closest(".option-area").next(".content_item").find(".content").html(data)
+    }.bind(this))
+  });
+
+  $(document).on('submit','.edit_post', function(e){
+    e.preventDefault();  
+    var action = $(this).attr("action");
+    var method = $(this).attr("method");
+    var update_content = $(this).find("input#post_content").val();
+    $.ajax({
+      url: action,
+      method: "PUT",
+      data: { post: {content: update_content}},
+      dataType: 'json',
+    }).success(function(data){
+      $(this).html(data.content);
+    }.bind(this))
+  })
+
+  $(document).on('click', '.edit-comment', function(e){
+    event.preventDefault();
+    var comment_id = $(this).data("id"); 
+    var post_id = $(this).attr("post-id");
+    $.ajax({
+      url: "posts/" + post_id + "/comments/" + comment_id  + "/edit",
+      method: "GET",
+      dataType: 'html',
+      processData: true,
+    }).success(function(data){
+      $(this).parent().prev().find("span").html(data)
+    }.bind(this))
+  })
+
+  $(document).on('submit','.edit_comment', function(e){
+    e.preventDefault();
+    var action = $(this).attr('action');
+    var method = $(this).attr('method');
+    var update_comment = $(this).find("input#comment_content").val();
+    $.ajax({
+      url: action,
+      method: "PUT",
+      data: {comment: {content: update_comment}},
+      dataType: 'json',
+    }).success(function(data){
+      $(this).html("<span>"+data.content+"</span>");
+    }.bind(this))
+  })
 });

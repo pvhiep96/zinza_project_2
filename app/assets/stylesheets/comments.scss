@@ -5,3 +5,22 @@
   cursor: pointer;
   width: 60px;
 }
+
+.comment-area{
+  border-top: solid 1px #E2EAF0;
+  border-bottom: solid 1px #E2EAF0;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px; 
+}
+input#comment_content.comment_textbox{
+  border: none;
+  margin-top: 10px; 
+}
+
+input#comment_content.comment_textbox:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
