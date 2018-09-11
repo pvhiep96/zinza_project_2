@@ -1,5 +1,16 @@
 class StaticPageController < ApplicationController
+  before_action :set_post, only: [:home]
   def home
-    @post = current_user.posts.build
+    @posts = current_user.posts
+    @post = Post.new(user: current_user)
+    @post.pictures.build
+    @comments = @post.comments
+  end
+
+
+  private
+
+  def set_post
+    @post_item = Post.find_by(id: params[:id])
   end
 end

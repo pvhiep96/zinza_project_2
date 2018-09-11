@@ -6,6 +6,32 @@
       %section.post_form
         = render 'shared/post_form'
     .col-md-8.posts
-      - current_user.posts.each do |f|
-        %li
-          = f.content
+      - @posts.each do |post|
+        .option-area
+          .option
+            %span.option_item
+            %span.option_item
+            %span.option_item
+          .option-menu
+            %li 
+              .destroy-post{'data-id': "#{post.id}" } Delete
+            %li Edit
+        %li.content_item
+          %span.content
+            = post.content
+          %span.timestamp
+            = time_ago_in_words(post.created_at)
+            ago.
+          %hr/
+          .comment-area
+            - post.comments.each do |comment|
+              %span.comment_item
+                .comment_detail
+                  = comment.user.name
+                  = comment.content
+                  .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+              %br
+          = form_for ([post, post.comments.build]) do |f|
+            = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"
+            .submit_comment
+              = f.submit 'Comment'

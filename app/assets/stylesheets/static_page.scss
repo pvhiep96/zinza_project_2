@@ -7,9 +7,11 @@
 .posts{
   list-style: none;
   padding: 0;
-  li {
+  li.content_item {
     padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
+    background-color: white;
+    margin-bottom: 10px;
+    width: 70%;
   }
   .user {
     margin-top: 5em;
@@ -23,12 +25,17 @@
       padding: 5px 0;
     }
   }
+
+  // .content_item{
+  //   position: relative;
+  // }
+
   .timestamp {
     color: gray;
     display: block;
     margin-left: 60px;
   }
-  // .gravatar {
+  // .avatar {
   //   float: left;
   //   margin-right: 10px;
   //   margin-top: 5px;
@@ -47,4 +54,50 @@ span.picture {
   input {
     border: 0;
   }
+}
+
+.option-area li{
+  padding-top: 0px;
+  cursor: pointer;
+  // position: absolute
+}
+
+.option-menu{
+  background-color: white;
+  // border: solid 1px;
+  box-shadow: 1px 1px 1px 1px #888888;
+  position: absolute;
+  padding-left: 5px;
+  padding-right: 20px;
+  margin-left: 420px;
+  margin-top: 20px; 
+  display: none;
+}
+
+.option_item{
+  height: 5px;
+  width: 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.option{
+  position: absolute;
+  margin-left: 490px;
+  cursor: pointer;
+}
+
+.option-menu li{
+  padding: 10px 0;
+  margin-bottom: 10px;
+  width: 50%;
+}
+
+.option-menu ul{
+  // margin-left: 0px;
+}
+
+#post_content{
+  resize: none;
 }

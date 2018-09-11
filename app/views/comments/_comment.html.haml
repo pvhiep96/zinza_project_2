@@ -1,0 +1,5 @@
+.comment_detail
+  = comment.user.name
+  = comment.content
+  .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+%br
