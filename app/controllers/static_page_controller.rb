@@ -1,7 +1,7 @@
 class StaticPageController < ApplicationController
   before_action :set_post, only: [:home]
   def home
-    @posts = current_user.posts
+    @posts = current_user.posts.limit(10)
     @post = Post.new(user: current_user)
     @post.pictures.build
     @comments = @post.comments

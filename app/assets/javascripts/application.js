@@ -35,6 +35,8 @@ $(".option-menu").click(function(event){
 })
 
 $(document).ready(function(){  
+  $("span.glyphicon.glyphicon-thumbs-up").attr("aria-hidden", "true")
+  $(".view-react").css({"display": "none"})
   $(document).on('click', ".option", function() {
     $(this).next().show()
   });
@@ -50,7 +52,7 @@ $(document).ready(function(){
   
   $("#new_post").submit(async function(event){
     event.preventDefault();
-    var file = $("#file_button").prop('files')[0];
+    var file = $(this).find("#file_button_edit").prop('files')[0];
     var base64_data = "";
     if(file != " "){
       var promise = getBase64(file);
@@ -139,11 +141,42 @@ $(document).ready(function(){
       url: action,
       method: "PUT",
       data: { post: {content: update_content}},
-      dataType: 'json',
+      dataType: 'html',
     }).success(function(data){
-      $(this).html(data.content);
+      $(this).html(data);
     }.bind(this))
   })
+
+  // $(document).on('submit','.edit_post', async function(e){
+  //   e.preventDefault();
+  //   var count_file = $(this).find("input:file").length;
+  //   var params_picture = "";
+  //   var a  = [];
+  //   for(var i = 0; i < count_file; i++){
+  //     var file = $(this).find(`input[name='post[pictures_attributes][${i}][picture_url]']`).prop('files')[0];
+  //     debugger
+  //     var base64_data = "";
+  //     if(file != " "){
+  //       var promise = getBase64(file);
+  //       var base64_data = await promise;
+  //       a.push( {i:{"picture_url": base64_data}} );
+  //     };
+  //   }
+  //   params_picture = a.join(",");
+  //   // debugger;    
+  //   var action = $(this).attr("action");
+  //   var method = $(this).attr("method");
+  //   var update_content = $(this).find("input#post_content").val();
+  //   // params_picture =  {"0":{"picture_url": base64_data}};
+  //   $.ajax({
+  //     url: action,
+  //     method: "PUT",
+  //     data: { post: {content: update_content, pictures_attributes: params_picture}},
+  //     dataType: 'html',
+  //   }).success(function(data){
+  //     $(this).html(data);
+  //   }.bind(this))
+  // })
 
   $(document).on('click', '.edit-comment', function(e){
     event.preventDefault();
@@ -171,6 +204,41 @@ $(document).ready(function(){
       dataType: 'json',
     }).success(function(data){
       $(this).html("<span>"+data.content+"</span>");
+    }.bind(this))
+  })
+
+  // $(document).on('mouseenter', '.react', function(e){
+  //   $(this).find(".view-react").show()
+  // });
+  $(document).on('submit', ".new_like", function(e){
+    e.preventDefault();
+    // debugger
+    var action = $(this).attr('action');
+    var method = $(this).attr('method');
+    $.ajax({
+      url: action,
+      method: method,
+      data: {like: {status: "like"}},
+      dataType: 'html',
+    }).success(function(data){
+      $(this).closest('.new_like').prev('.count_like').remove(),
+      $(this).html(data)
+    }.bind(this))
+  })
+
+  $(document).on('click', ".destroy-like", function(e){
+    e.preventDefault();
+    debugger
+    var post_id = $(this).attr('post-id');
+    var like_id = $(this).data('id');
+    $.ajax({
+      url: "posts/" + post_id + "/likes/" + like_id,
+      method: "DELETE",
+      dataType: 'html',
+      processData: true,
+    }).success(function(data){
+      $(this).prev('.count_like').remove(),
+      $(this).html(data)
     }.bind(this))
   })
 });

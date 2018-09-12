@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy  
   has_many :friendships, dependent: :destroy
-  has_many :follows
+  has_many :follows, dependent: :destroy
   
   mount_uploader :avatar, AvatarUploader
 
