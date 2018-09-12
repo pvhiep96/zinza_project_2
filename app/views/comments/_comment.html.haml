@@ -1,5 +1,7 @@
 .comment_detail
-  = comment.user.name
-  = comment.content
-  .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
-%br
+  = link_to comment.user.name
+  .comment-show-area
+    %span= comment.content
+  .edit_delete
+    .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+    .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit

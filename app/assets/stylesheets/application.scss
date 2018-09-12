@@ -20,11 +20,31 @@
   float: left;
   margin-right: 20px;
 }
+
+.home a{
+  color: white;
+}
+
+li.search{
+  color: white;
+}
+
+.user_name a{
+  color: white;
+}
+
+span.glyphicon{
+  color: white
+}
+
+span.glyphicon a{
+  color: white
+}
 ul .navbar-right{
   position: absolute
 }
 .navbar{
-  background-color: white
+  background-color: blue
 }
 .navbar-left{
   float: left;

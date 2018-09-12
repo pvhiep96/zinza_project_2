@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :user_signed_in?, only: [:destroy, :create]
-  before_action :set_post, only: [:destroy, :show]
+  before_action :set_post, only: [:destroy, :show, :edit, :update]
   def index
     @post = Post.all
   end
@@ -11,6 +11,12 @@ class PostsController < ApplicationController
   end
 
   def edit
+    respond_to do |format|
+      format.js
+      format.html do
+        render 'edit', layout: false, locals: {post: @post} 
+      end
+    end
   end
 
   def create
@@ -25,6 +31,12 @@ class PostsController < ApplicationController
   end
 
   def update
+    @post.update_attributes(post_params)
+    respond_to do |f|
+      f.js
+      f.json { render json: @post.to_json(only: [:content])}
+      # format.json { render json: @comment.to_json(only: [:content], include: [user: {only:[:name]}])}
+    end
   end
 
   def destroy
