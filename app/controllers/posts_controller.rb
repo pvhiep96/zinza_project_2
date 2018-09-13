@@ -7,7 +7,7 @@ class PostsController < ApplicationController
   
   def show
     @user = current_user
-    @posts = @user.posts.all
+    @posts = @user.posts.limit(10)
   end
 
   def edit
@@ -34,7 +34,10 @@ class PostsController < ApplicationController
     @post.update_attributes(post_params)
     respond_to do |f|
       f.js
-      f.json { render json: @post.to_json(only: [:content])}
+      f.html do
+        render 'post_form', layout: false, locals: {post: @post} 
+      end
+      # f.json { render json: @post.to_json(only: [:content])}
       # format.json { render json: @comment.to_json(only: [:content], include: [user: {only:[:name]}])}
     end
   end

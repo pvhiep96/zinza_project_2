@@ -25,6 +25,9 @@
           %span.timestamp
             = time_ago_in_words(post.updated_at)
             ago.
+          .count_like= post.likes.count            
+          = form_for ([post, post.likes.build]) do |f|
+            = f.submit :like
           .comment-area
             - post.comments.each do |comment|
               %span.comment_item
