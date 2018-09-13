@@ -25,9 +25,13 @@
           %span.timestamp
             = time_ago_in_words(post.updated_at)
             ago.
-          .count_like= post.likes.count            
-          = form_for ([post, post.likes.build]) do |f|
-            = f.submit :like
+          .count_like= post.likes.count
+          - if post.likes.find_by(user: current_user).nil?
+            = form_for ([post, post.likes.build]) do |f|
+              = f.submit :like
+          - else
+            .destroy-like
+              %button.destroy-like-button{'data-id': "#{post.likes.find_by(user: current_user).id}", 'post-id': "#{post.id}" } Delete
           .comment-area
             - post.comments.each do |comment|
               %span.comment_item
