@@ -42,7 +42,7 @@ $(document).ready(function(){
   });
   $( document ).on( 'focus', ':input', function(){
     $( this ).attr( 'autocomplete', 'off' );
-});
+  });
   $(".container").mouseup(function(e){
     var subject = $(".option-menu");
     if(e.target.class != subject.attr("class")){
@@ -50,31 +50,93 @@ $(document).ready(function(){
     }
   })
   
-  $("#new_post").submit(async function(event){
+  $(document).on('submit', "#new_post",async function(event){
     event.preventDefault();
-    var file = $(this).find("#file_button_edit").prop('files')[0];
-    var base64_data = "";
-    if(file != " "){
-      var promise = getBase64(file);
-      var base64_data = await promise;
-    };
-    action = $(this).attr('action');
-    method = $(this).attr('method');
-    content = $(this).find('textarea').val();
-    params_picture =  {"0":{"picture_url": base64_data}};
-    $.ajax({
-      // async: false,
-      type: method,
-      url: action,
-      data: { post: {content: content, pictures_attributes: params_picture}},
-      dataType: 'html',
-      success: function(data){
-        $(':input.post_form').prop('disabled', false);
-        $('.posts').prepend(data);
-        $('#post_content').val('');
-      },
-    });
+    
+    var count_file = $("input:file")[0].files.length;
+    var params_picture = "";
+    var a  = [];
+    if ( count_file != 0){
+      for(var i = 0; i < count_file; i++){
+        var file = $("#file_button").prop('files')[`${i}`];
+        var base64_data = "";
+        if(file != " "){
+          var promise = getBase64(file);
+          var base64_data = await promise;
+          var b = `${i}`;
+          var c =  '"' + b + '"' + ':{"picture_url":' + '"' + base64_data + '"}';
+          a.push(c);
+        };
+      }
+      params_picture = a.join(",");
+      params_picture = '{'+ params_picture +'}';
+      action = $(this).attr('action');
+      method = $(this).attr('method');
+      content = $(this).find('textarea').val();
+
+      $.ajax({
+        // async: false,
+        type: method,
+        url: action,
+        data: { post: {content: content, pictures_attributes: JSON.parse(params_picture)}},
+        dataType: 'html',
+        success: function(data){
+          $(':input.post_form').prop('disabled', false);
+          $('.posts').prepend(data);
+          $('#post_content').val('');
+        },
+      });
+    }
+    else{
+      action = $(this).attr('action');
+      method = $(this).attr('method');
+      content = $(this).find('textarea').val();
+      $.ajax({
+        // async: false,
+        type: method,
+        url: action,
+        data: { post: {content: content}},
+        dataType: 'html',
+        success: function(data){
+          $(':input.post_form').prop('disabled', false);
+          $('.posts').prepend(data);
+          $('#post_content').val('');
+        },
+      });
+    }
   });
+
+  $(document).on('submit','.edit_post', async function(e){
+    e.preventDefault();
+    var count_file = $(this).find("input:file").length;
+    var params_picture = "";
+    var a  = [];
+    for(var i = 0; i < count_file; i++){
+      var picture_id = $(this).find(`input[name='post[pictures_attributes][${i}][id]']`).val();
+      var file = $(this).find(`input[name='post[pictures_attributes][${i}][picture_url]']`).prop('files')[0];
+      var base64_data = "";
+      if(file){
+        var promise = getBase64(file);
+        var base64_data = await promise;
+        var b = `${i}`;
+        var c =  '"' + b + '"' + ':{"picture_url":' + '"' + base64_data + '", "id":"'+ picture_id + '"}';
+        a.push(c);
+      };
+    }
+    params_picture = a.join(",");
+    params_picture = '{'+ params_picture +'}'
+    var action = $(this).attr("action");
+    var method = $(this).attr("method");
+    var update_content = $(this).find("input#post_content").val();
+    $.ajax({
+      url: action,
+      method: "PUT",
+      data: { post: {content: update_content, pictures_attributes: JSON.parse(params_picture)}},
+      dataType: 'html',
+    }).success(function(data){
+      $(this).html(data);
+    }.bind(this))
+  })
 
   $(document).on('click', '.destroy-post', function(event){
     event.preventDefault();
@@ -132,52 +194,6 @@ $(document).ready(function(){
     }.bind(this))
   });
 
-  $(document).on('submit','.edit_post', function(e){
-    e.preventDefault();  
-    var action = $(this).attr("action");
-    var method = $(this).attr("method");
-    var update_content = $(this).find("input#post_content").val();
-    $.ajax({
-      url: action,
-      method: "PUT",
-      data: { post: {content: update_content}},
-      dataType: 'html',
-    }).success(function(data){
-      $(this).html(data);
-    }.bind(this))
-  })
-
-  // $(document).on('submit','.edit_post', async function(e){
-  //   e.preventDefault();
-  //   var count_file = $(this).find("input:file").length;
-  //   var params_picture = "";
-  //   var a  = [];
-  //   for(var i = 0; i < count_file; i++){
-  //     var file = $(this).find(`input[name='post[pictures_attributes][${i}][picture_url]']`).prop('files')[0];
-  //     debugger
-  //     var base64_data = "";
-  //     if(file != " "){
-  //       var promise = getBase64(file);
-  //       var base64_data = await promise;
-  //       a.push( {i:{"picture_url": base64_data}} );
-  //     };
-  //   }
-  //   params_picture = a.join(",");
-  //   // debugger;    
-  //   var action = $(this).attr("action");
-  //   var method = $(this).attr("method");
-  //   var update_content = $(this).find("input#post_content").val();
-  //   // params_picture =  {"0":{"picture_url": base64_data}};
-  //   $.ajax({
-  //     url: action,
-  //     method: "PUT",
-  //     data: { post: {content: update_content, pictures_attributes: params_picture}},
-  //     dataType: 'html',
-  //   }).success(function(data){
-  //     $(this).html(data);
-  //   }.bind(this))
-  // })
-
   $(document).on('click', '.edit-comment', function(e){
     event.preventDefault();
     var comment_id = $(this).data("id"); 
@@ -207,12 +223,8 @@ $(document).ready(function(){
     }.bind(this))
   })
 
-  // $(document).on('mouseenter', '.react', function(e){
-  //   $(this).find(".view-react").show()
-  // });
   $(document).on('submit', ".new_like", function(e){
     e.preventDefault();
-    // debugger
     var action = $(this).attr('action');
     var method = $(this).attr('method');
     $.ajax({
@@ -226,9 +238,8 @@ $(document).ready(function(){
     }.bind(this))
   })
 
-  $(document).on('click', ".destroy-like", function(e){
+  $(document).on('click', ".destroy-like-button", function(e){
     e.preventDefault();
-    debugger
     var post_id = $(this).attr('post-id');
     var like_id = $(this).data('id');
     $.ajax({
@@ -237,8 +248,20 @@ $(document).ready(function(){
       dataType: 'html',
       processData: true,
     }).success(function(data){
-      $(this).prev('.count_like').remove(),
-      $(this).html(data)
+      $(this).parent().prev('.count_like').remove(),
+      $(this).parent().html(data)
     }.bind(this))
+  })
+
+  $(document).on('click', ".destroy-picture-button", function(e){
+    e.preventDefault();
+    debugger
+    var id_picture = $(this).next("input").val();
+    $.ajax({
+      url: "posts/"+ $(this).attr("post-id")+"/pictures/"+ id_picture,
+      method: "DELETE",
+      dataType: 'html',
+      processData: true,
+    })
   })
 });
