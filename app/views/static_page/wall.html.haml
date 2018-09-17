@@ -1,0 +1,87 @@
+.container
+  .row
+    %aside.col-md-3
+      %section.user_info
+        %h3= @user.name
+        %ul.stat
+          %li 
+            %a
+              %span.name Friend
+              %span.count
+          %li
+            %a
+              %span.name Post
+              %br
+              %span.count
+                = @user.posts.count
+      - if current_user != @user
+        -if @friend
+          .destroy-friend
+            .destroy-friendship-button{'friendship-id':"#{@friend.id}"} Unfriend
+        - else 
+          - user ||= @user
+          = form_for Friendship.new do |f|
+            = f.hidden_field :user_response, value: user.id
+            = f.submit "Friend request"
+      - else
+        - if @response
+          .request-area
+            - current_user.user_responses.each do |response|
+              %li
+                = response.requester.name
+                .destroy-friend
+                  .destroy-friendship-button{'friendship-id':"#{@response.id}"} Refuse
+                .accept-friend
+                  .accept-friendship-button{'friendship-id':"#{@response.id}"} Accept
+    .col-md-9.posts
+      - @posts.each do |post|
+        .avatar-area 
+          = image_tag post.user.avatar.url
+        .option-area
+          .option
+            %span.option_item
+            %span.option_item
+            %span.option_item
+          .option-menu
+            %li 
+              .destroy-post{'data-id': "#{post.id}" } Delete
+            %li
+              .edit-post{'data-id': "#{post.id}" } Edit
+        %li.content_item
+          %span.content
+            %span.timestamp
+              = link_to post.user.name, wall_path(post.user.id)
+              = time_ago_in_words(post.updated_at)
+              ago.
+            %span.content-area
+              = post.content
+            - post.pictures.each do |p|
+              = image_tag p.picture_url.url
+          .like-area
+            .like
+              - if post.likes.find_by(user: current_user).nil?
+                = form_for ([post, post.likes.build]) do |f|
+                  = f.button "", type: :submit , class: "fa fa-heart-o heart"
+                  = post.likes.count
+              - else
+                .destroy-like
+                  %i.fa.fa-heart-o.destroy-like-button{'data-id': "#{post.likes.find_by(user: current_user).id}", 'post-id': "#{post.id}"}
+                  = post.likes.count
+            %i.fa.fa-comments-o
+            = post.comments.count
+            - if post.comments.present?
+              .comment-area
+                - post.comments.each do |comment|
+                  %span.comment_item
+                    .avatar-comment-area 
+                      = image_tag comment.user.avatar.url
+                    .comment_detail
+                      = link_to comment.user.name
+                      = time_ago_in_words(comment.updated_at)
+                      .comment-show-area
+                        %span= comment.content
+                      .edit_delete
+                        .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+                        .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit
+            = form_for ([post, post.comments.build]) do |f|
+              = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"

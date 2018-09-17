@@ -23,7 +23,6 @@
   .timestamp {
     color: gray;
     display: block;
-    margin-left: 60px;
   }
   // .gravatar {
   //   float: left;
@@ -46,10 +45,6 @@ span.picture {
   }
 }
 
-.new_comment {
-  margin-left: 20px;
-}
-
 textarea#post_content{
   width: 250px;
   border-radius: 5px;
@@ -57,4 +52,17 @@ textarea#post_content{
 
 .content_item{
   border-radius: 5px;
+}
+
+.content img{
+  width: 400px;
+  height: auto;
+}
+
+.new_like{
+  margin-left: 60px;
+}
+
+.like-area .new_comment{
+  margin-left: 0px !important;
 }

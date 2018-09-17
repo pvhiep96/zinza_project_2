@@ -1,9 +1,10 @@
+%span.timestamp
+  = link_to post.user.name
+  = time_ago_in_words(post.updated_at)
+  ago.
 = form_for @post do |f|
   = f.text_field :content, class: "edit_post"
   = f.fields_for :pictures do |p|
     = image_tag p.object.picture_url.url
     = p.file_field :picture_url, id: "file_button_edit"
-    %button.destroy-picture-button{ 'post-id': "#{post.id}" } Delete
   = f.submit "Update", class: "btn btn-primary edit_post_form"
--# - @post.pictures.each do |p|
--#   = image_tag p.picture_url.url

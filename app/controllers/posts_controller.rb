@@ -25,7 +25,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render '  ', layout: false, locals: {post: @post} 
+        render '_post', layout: false, locals: {post: @post} 
       end
     end
   end

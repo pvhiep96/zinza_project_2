@@ -12,6 +12,7 @@
  * 
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -156,3 +157,53 @@ body{
   border-radius: 150px
 }
 
+.like-area i.fa.fa-comments-o{
+  margin-left: 150px;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.destroy-like{
+ position: absolute;
+ width: 60px; 
+}
+
+.new_like{
+  position: absolute;
+  width: 60px;
+}
+
+.avatar-area img{
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-left: 5px
+}
+
+.avatar-comment-area img{
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  position: absolute;
+  margin-left: 60px
+}
+
+.destroy-friendship-button{
+  cursor: pointer;
+  font-weight: bold;
+  color: black
+}
+
+.accept-friendship-button{
+  cursor: pointer;
+  font-weight: bold;
+  color: black
+}
+
+.request-area{
+  position: absolute;
+  width: 60px;
+  margin-left: 100px;
+}

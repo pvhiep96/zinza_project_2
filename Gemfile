@@ -11,6 +11,7 @@ gem 'haml'
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'sass-rails', '~> 5.0'
 gem 'kaminari'
+gem "font-awesome-rails"
 gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 gem "jquery-rails"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
