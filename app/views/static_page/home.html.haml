@@ -3,6 +3,20 @@
     %aside.col-md-3
       %section.user_info
         = render 'shared/user_info'
+      .request-area
+        Friend request
+        = current_user.user_responses.where(status: "notfriend").count
+        - if @current_friendship.present?
+          .option-response
+            - current_user.user_responses.where(status: "notfriend").each do |response|
+              %li
+                = link_to response.requester.name
+                .destroy-friend
+                  .destroy-friendship-button{'friendship-id':"#{@current_friendship.ids}"}
+                    %span.glyphicon.glyphicon-remove-circle.del-request-for-user
+                .accept-friend
+                  .accept-friendship-button{'friendship-id':"#{@current_friendship.ids}"}
+                    %span.glyphicon.glyphicon-ok-circle
       %section.post_form
         = render 'shared/post_form'
     .col-md-9.posts
@@ -48,7 +62,7 @@
                     .avatar-comment-area 
                       = image_tag comment.user.avatar.url
                     .comment_detail
-                      = link_to comment.user.name
+                      = link_to comment.user.name, wall_path(comment.user.id)
                       = time_ago_in_words(comment.updated_at)
                       .comment-show-area
                         %span= comment.content

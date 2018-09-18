@@ -16,4 +16,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  scope :get_friend_ids, -> (user_id){
+    Friendship.where('user_request = ? or user_response = ? AND status = 1' , user_id, user_id)
+      .pluck(:user_request, :user_response).flatten.uniq
+  }
 end

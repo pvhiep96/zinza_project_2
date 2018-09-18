@@ -8,6 +8,7 @@
             %a
               %span.name Friend
               %span.count
+                = @user.user_responses.where(status: "accept").count
           %li
             %a
               %span.name Post
@@ -15,24 +16,31 @@
               %span.count
                 = @user.posts.count
       - if current_user != @user
-        -if @friend
+        -if @current_friendship.present?      
           .destroy-friend
-            .destroy-friendship-button{'friendship-id':"#{@friend.id}"} Unfriend
+            .destroy-friendship-button{'friendship-id':"#{@current_friendship.id}"}
+              %span.glyphicon.glyphicon-remove-circle
         - else 
           - user ||= @user
-          = form_for Friendship.new do |f|
-            = f.hidden_field :user_response, value: user.id
-            = f.submit "Friend request"
-      - else
-        - if @response
           .request-area
-            - current_user.user_responses.each do |response|
-              %li
-                = response.requester.name
-                .destroy-friend
-                  .destroy-friendship-button{'friendship-id':"#{@response.id}"} Refuse
-                .accept-friend
-                  .accept-friendship-button{'friendship-id':"#{@response.id}"} Accept
+            = form_for Friendship.new do |f|
+              = f.hidden_field :user_response, value: user.id
+              = f.submit "Friend request"
+      - else
+        .request-area
+          Friend request
+          = current_user.user_responses.where(status: "notfriend").count
+          - if @current_friendship.present?
+            .option-response
+              - current_user.user_responses.where(status: "notfriend").each do |response|
+                %li
+                  = link_to response.requester.name 
+                  .destroy-friend
+                    .destroy-friendship-button{'friendship-id':"#{@current_friendship.id}"}
+                      %span.glyphicon.glyphicon-remove-circle.del-request-for-user
+                  .accept-friend
+                    .accept-friendship-button{'friendship-id':"#{@current_friendship.id}"}
+                      %span.glyphicon.glyphicon-ok-circle
     .col-md-9.posts
       - @posts.each do |post|
         .avatar-area 

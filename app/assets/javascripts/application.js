@@ -42,6 +42,17 @@ $(document).ready(function(){
 
   $(".comment-area").css({"display": "none"})
 
+  $(document).on('click', '.request-area', function(){
+    $(this).find('.option-response').show()
+  })
+
+  $(".container").mouseup(function(e){
+    var subject = $(".option-response");
+    if(e.target.class != subject.attr("class")){
+      subject.hide();
+    }
+  })
+
   $(document).on('click', ".option", function() {
     $(this).next().show()
   });
@@ -58,7 +69,6 @@ $(document).ready(function(){
   })
 
   $(document).on('click', '.fa-comments-o', function(){
-    debugger
     $(this).next(".comment-area").toggle();
   })
   
@@ -290,6 +300,7 @@ $(document).ready(function(){
   // friend request
   $(document).on('submit', '.new_friendship', function(e){
     e.preventDefault();
+    debugger
     method = $(this).attr('method')
     action = $(this).attr('action')
     user_response = $(this).find("input#friendship_user_response").val();
@@ -299,33 +310,50 @@ $(document).ready(function(){
       data: {friendship: {user_response: user_response}},
       dataType: 'html',
     }).success(function(data){
-      $(this).html(data);
+      $(this).parent().html(data);
     }.bind(this));
   })
 
-// destroy friendship
-  $(document).on('click', '.destroy-friendship-button', function(e){
+// destroy friendship for user send request
+  $(document).on('click', '.glyphicon-remove-circle', function(e){
     e.preventDefault();
-    friendship_id = $(this).attr('friendship-id');
+    friendship_id = $(this).parent().attr('friendship-id');
     $.ajax({
       url: window.location.origin +"/friendships/" + friendship_id,
       method: "DELETE",
       dataType: 'html',
       processData: true,
     }).success(function(data){
-      $(this).parent().html(data);
-      $(this).remove();
+      $(this).closest('.destroy-friend').html(data);
     }.bind(this))
   })
-// update friendship
-  $(document).on('click', '.accept-friendship-button', function(e){
+
+// destroy request for use recived request
+  $(document).on('click', '.del-request-for-user', function(e){
     e.preventDefault();
-    friendship_id = $(this).attr('friendship-id');
+    debugger
+    friendship_id = $(this).parent().attr('friendship-id');
+    $.ajax({
+      url: window.location.origin +"/friendships/" + friendship_id,
+      method: "DELETE",
+      dataType: 'html',
+      processData: true,
+    }).success(function(data){
+      $(this).closest('li').remove()
+    }.bind(this))
+  })
+
+// update friendship
+  $(document).on('click', '.glyphicon-ok-circle', function(e){
+    e.preventDefault();
+    friendship_id = $(this).parent().attr('friendship-id');
     $.ajax({
       url: window.location.origin +"/friendships/" + friendship_id,
       method: "PUT",
       data: {friendship: {status: "accept"}},
-      dataType: 'html'
-    })
+      dataType: 'json'
+    }).success(function(data){
+      
+    }.bind(this))
   })
 });
