@@ -1,1 +1,14 @@
-%h1= current_user.name
+%h3= current_user.name
+%ul.stat
+  %li 
+    %a
+      %span.name Friend
+      %span.count
+  %li
+    %a
+      %span.name Post
+      %br
+      %span.count
+        = current_user.posts.count
+
+        

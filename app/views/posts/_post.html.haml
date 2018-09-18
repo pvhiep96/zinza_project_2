@@ -1,3 +1,5 @@
+.avatar-area 
+  = image_tag post.user.avatar.url
 .option-area
   .option
     %span.option_item
@@ -10,28 +12,34 @@
       .edit-post{'data-id': "#{post.id}" } Edit
 %li.content_item
   %span.content
+    %span.timestamp
+      = link_to post.user.name
+      = time_ago_in_words(post.updated_at)
+      ago.
     = post.content
     - post.pictures.each do |p|
       = image_tag p.picture_url.url
-  %span.timestamp
-    = time_ago_in_words(post.updated_at)
-    ago.
-  .count_like= post.likes.count
-  - if post.likes.find_by(user: current_user).nil?
-    = form_for ([post, post.likes.build]) do |f|
-      = f.submit :like
-  - else
-    %button.destroy-like-button{'data-id': "#{post.likes.find_by(user: current_user).id}", 'post-id': "#{post.id}" } Delete
-  .comment-area
-    - post.comments.each do |comment|
-      %hr
-      %span.comment_item
-        .comment_detail
-          = link_to comment.user.name
-          .comment-show-area
-            %span= comment.content
-          .edit_delete
-            .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
-            .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit
-  = form_for ([post, post.comments.build]) do |f|
-    = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"
+  .like-area
+    .like
+      - if post.likes.find_by(user: current_user).nil?
+        = form_for ([post, post.likes.build]) do |f|
+          = f.button "", type: :submit , class: "fa fa-heart-o heart"
+          = post.likes.count
+      - else
+        %i.fa.fa-heart-o.destroy-like-button{'data-id': "#{post.likes.find_by(user: current_user).id}", 'post-id': "#{post.id}"}
+        = post.likes.count
+    %i.fa.fa-comments-o
+    = post.comments.count
+    - if post.comments.count > 0
+      .comment-area
+        - post.comments.each do |comment|
+          %span.comment_item
+            .comment_detail
+              = link_to comment.user.name
+              .comment-show-area
+                %span= comment.content
+              .edit_delete
+                .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+                .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit
+    = form_for ([post, post.comments.build]) do |f|
+      = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"

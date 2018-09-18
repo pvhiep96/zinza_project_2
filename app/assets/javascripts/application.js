@@ -24,11 +24,12 @@ function getBase64(file, onLoadCallback) {
       reader.readAsDataURL(file);
   });
 }
-
+// hiển thị edit 
 $(document).on('click', ".option", function() {
   $(this).next().show()
 });
 
+//tắt bảng edit
 $(".option-menu").click(function(event){
   event.stopPropagation();
   $(".option-menu").hide();
@@ -36,27 +37,38 @@ $(".option-menu").click(function(event){
 
 $(document).ready(function(){  
   $("span.glyphicon.glyphicon-thumbs-up").attr("aria-hidden", "true")
+
   $(".view-react").css({"display": "none"})
+
+  $(".comment-area").css({"display": "none"})
+
   $(document).on('click', ".option", function() {
     $(this).next().show()
   });
+
   $( document ).on( 'focus', ':input', function(){
     $( this ).attr( 'autocomplete', 'off' );
   });
+  
   $(".container").mouseup(function(e){
     var subject = $(".option-menu");
     if(e.target.class != subject.attr("class")){
       subject.hide();
     }
   })
+
+  $(document).on('click', '.fa-comments-o', function(){
+    debugger
+    $(this).next(".comment-area").toggle();
+  })
   
+  // tạo bài viết
   $(document).on('submit', "#new_post",async function(event){
-    event.preventDefault();
-    
+    event.preventDefault();  
     var count_file = $("input:file")[0].files.length;
     var params_picture = "";
     var a  = [];
-    if ( count_file != 0){
+    if (count_file){
       for(var i = 0; i < count_file; i++){
         var file = $("#file_button").prop('files')[`${i}`];
         var base64_data = "";
@@ -77,7 +89,7 @@ $(document).ready(function(){
       $.ajax({
         // async: false,
         type: method,
-        url: action,
+        url: window.location.origin +"/"+action,
         data: { post: {content: content, pictures_attributes: JSON.parse(params_picture)}},
         dataType: 'html',
         success: function(data){
@@ -94,7 +106,7 @@ $(document).ready(function(){
       $.ajax({
         // async: false,
         type: method,
-        url: action,
+        url: window.location.origin +"/"+action,
         data: { post: {content: content}},
         dataType: 'html',
         success: function(data){
@@ -106,11 +118,13 @@ $(document).ready(function(){
     }
   });
 
+  // sửa bài viết
   $(document).on('submit','.edit_post', async function(e){
     e.preventDefault();
     var count_file = $(this).find("input:file").length;
     var params_picture = "";
     var a  = [];
+    debugger
     for(var i = 0; i < count_file; i++){
       var picture_id = $(this).find(`input[name='post[pictures_attributes][${i}][id]']`).val();
       var file = $(this).find(`input[name='post[pictures_attributes][${i}][picture_url]']`).prop('files')[0];
@@ -129,7 +143,7 @@ $(document).ready(function(){
     var method = $(this).attr("method");
     var update_content = $(this).find("input#post_content").val();
     $.ajax({
-      url: action,
+      url: window.location.origin +"/"+action,
       method: "PUT",
       data: { post: {content: update_content, pictures_attributes: JSON.parse(params_picture)}},
       dataType: 'html',
@@ -138,11 +152,12 @@ $(document).ready(function(){
     }.bind(this))
   })
 
+  //xóa bài viết
   $(document).on('click', '.destroy-post', function(event){
     event.preventDefault();
     var id = $(this).data("id");
     $.ajax({
-      url: "/posts/" + id,
+      url: window.location.origin +"/"+"/posts/" + id,
       method: "DELETE",
       processData: true,
     }).success(function() {
@@ -150,6 +165,7 @@ $(document).ready(function(){
     }.bind(this))
   });
 
+  //tạo comment
   $(document).on('submit', ".new_comment", function(e){
     e.preventDefault();
     action = $(this).attr('action');
@@ -157,22 +173,23 @@ $(document).ready(function(){
     content = $(this).find('input.comment_textbox').val();
     $.ajax({
       type: method,
-      url: action,
+      url: window.location.origin +"/"+action,
       data: { comment: {content: content}},
       dataType: 'html',
     }).success(function(data){
       $(':input[type="submit"]').prop('disabled', false);
-      $(this).prev(".comment-area").prepend(data);     
+      $(this).parent().html(data);    
       ($(this).children("input")).val('');
     }.bind(this));
   });
 
+  //xóa comment
   $(document).on('click', '.destroy-comment', function(event){
     event.preventDefault();
     var post_id = $(this).attr('post-id');
     var id = $(this).data("id");
     $.ajax({
-      url: "posts/" + post_id + "/comments/" + id,
+      url: window.location.origin +"/"+"posts/" + post_id + "/comments/" + id,
       method: "DELETE",
       processData: true,
     }).success(function() {
@@ -180,12 +197,14 @@ $(document).ready(function(){
     }.bind(this))
   });
 
+  // form bài viết
   $(document).on('click', '.edit-post', function(event){
     event.preventDefault();
+    debugger  
     // $(".post-area").hide();
     var post_id = $(this).data("id");
     $.ajax({
-      url: "posts/" + post_id + "/edit",
+      url: window.location.origin +"/"+"posts/" + post_id + "/edit",
       method: "GET",
       dataType: 'html',
       processData: true,
@@ -194,12 +213,13 @@ $(document).ready(function(){
     }.bind(this))
   });
 
+  //hiển thị form sửa comment
   $(document).on('click', '.edit-comment', function(e){
     event.preventDefault();
     var comment_id = $(this).data("id"); 
     var post_id = $(this).attr("post-id");
     $.ajax({
-      url: "posts/" + post_id + "/comments/" + comment_id  + "/edit",
+      url: window.location.origin +"/"+"posts/" + post_id + "/comments/" + comment_id  + "/edit",
       method: "GET",
       dataType: 'html',
       processData: true,
@@ -208,13 +228,14 @@ $(document).ready(function(){
     }.bind(this))
   })
 
+  //sửa comment
   $(document).on('submit','.edit_comment', function(e){
     e.preventDefault();
     var action = $(this).attr('action');
     var method = $(this).attr('method');
     var update_comment = $(this).find("input#comment_content").val();
     $.ajax({
-      url: action,
+      url: window.location.origin +"/"+action,
       method: "PUT",
       data: {comment: {content: update_comment}},
       dataType: 'json',
@@ -223,45 +244,88 @@ $(document).ready(function(){
     }.bind(this))
   })
 
+  // like
   $(document).on('submit', ".new_like", function(e){
     e.preventDefault();
+    debugger
     var action = $(this).attr('action');
     var method = $(this).attr('method');
     $.ajax({
-      url: action,
+      url: window.location.origin +"/"+action,
       method: method,
       data: {like: {status: "like"}},
       dataType: 'html',
     }).success(function(data){
-      $(this).closest('.new_like').prev('.count_like').remove(),
-      $(this).html(data)
+      $(this).parent().html(data)
     }.bind(this))
   })
 
+  // bỏ like
   $(document).on('click', ".destroy-like-button", function(e){
     e.preventDefault();
     var post_id = $(this).attr('post-id');
     var like_id = $(this).data('id');
     $.ajax({
-      url: "posts/" + post_id + "/likes/" + like_id,
+      url: window.location.origin + "/posts/" + post_id + "/likes/" + like_id,
       method: "DELETE",
       dataType: 'html',
       processData: true,
     }).success(function(data){
-      $(this).parent().prev('.count_like').remove(),
-      $(this).parent().html(data)
+      $(this).closest(".like").html(data)
     }.bind(this))
   })
 
+  // xóa ảnh
   $(document).on('click', ".destroy-picture-button", function(e){
     e.preventDefault();
-    debugger
     var id_picture = $(this).next("input").val();
     $.ajax({
-      url: "posts/"+ $(this).attr("post-id")+"/pictures/"+ id_picture,
+      url: window.location.origin +"/"+"posts/"+ $(this).attr("post-id")+"/pictures/"+ id_picture,
       method: "DELETE",
       dataType: 'html',
       processData: true,
+    })
+  })
+
+  // friend request
+  $(document).on('submit', '.new_friendship', function(e){
+    e.preventDefault();
+    method = $(this).attr('method')
+    action = $(this).attr('action')
+    user_response = $(this).find("input#friendship_user_response").val();
+    $.ajax({
+      url: window.location.origin +"/"+action,
+      method: method,
+      data: {friendship: {user_response: user_response}},
+      dataType: 'html',
+    }).success(function(data){
+      $(this).html(data);
+    }.bind(this));
+  })
+
+// destroy friendship
+  $(document).on('click', '.destroy-friendship-button', function(e){
+    e.preventDefault();
+    friendship_id = $(this).attr('friendship-id');
+    $.ajax({
+      url: window.location.origin +"/friendships/" + friendship_id,
+      method: "DELETE",
+      dataType: 'html',
+      processData: true,
+    }).success(function(data){
+      $(this).parent().html(data);
+      $(this).remove();
+    }.bind(this))
+  })
+// update friendship
+  $(document).on('click', '.accept-friendship-button', function(e){
+    e.preventDefault();
+    friendship_id = $(this).attr('friendship-id');
+    $.ajax({
+      url: window.location.origin +"/friendships/" + friendship_id,
+      method: "PUT",
+      data: {friendship: {status: "accept"}},
+      dataType: 'html'
     })
   })
 });

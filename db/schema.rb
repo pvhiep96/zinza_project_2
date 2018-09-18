@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_12_064551) do
+ActiveRecord::Schema.define(version: 2018_09_17_023256) do
 
   create_table "comments", force: :cascade do |t|
     t.string "content"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018_09_12_064551) do
     t.integer "user_response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
     t.index ["user_request", "user_response"], name: "index_friendships_on_user_request_and_user_response", unique: true
   end
 

@@ -1,8 +1,11 @@
+%span.timestamp
+  = link_to post.user.name
+  = time_ago_in_words(post.updated_at)
+  ago.
 %span.content
   .edit_post_form
     = form_for @post do |post|
       = post.text_field :content, class: "edit_post"
-      -# = post.submit "update post", class: "btn btn-primary update_post"
     %span.timestamp
       = time_ago_in_words(post.updated_at)
       ago.
