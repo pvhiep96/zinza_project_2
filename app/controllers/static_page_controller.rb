@@ -4,12 +4,12 @@ class StaticPageController < ApplicationController
   before_action :find_user, only: [:wall, :home]
   def home
     friend_ids = User.get_friend_ids(current_user.id)
-    # @posts = current_user.posts.limit(10)
-    @posts = Post.where('user_id IN (?)', friend_ids).limit(50)
+    @posts = Post.where('user_id IN (?)', friend_ids).page(params[:page]).per(5)
     @post = Post.new(user: current_user)
     @post.pictures.build
     @comments = @post.comments
     @friend_ship = Friendship.new()
+    render_load_post and return if request.xhr?
   end
 
   def wall
@@ -29,5 +29,9 @@ class StaticPageController < ApplicationController
 
   def set_post
     @post_item = Post.find_by(id: params[:id])
+  end
+
+  def render_load_post
+    render "load_post", layout: false
   end
 end

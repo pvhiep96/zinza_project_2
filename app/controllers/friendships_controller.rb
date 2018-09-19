@@ -8,7 +8,7 @@ class FriendshipsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render 'destroy', layout: false, locals: {friendship: @friend} 
+        render 'destroy', layout: false, locals: {friendship: @friend}
       end
     end
   end

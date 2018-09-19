@@ -357,3 +357,19 @@ $(document).ready(function(){
     }.bind(this))
   })
 });
+
+//scroll
+var i = 1;
+$(window).scroll(function() {
+  if($(window).scrollTop() + $(window).height() == $(document).height()) {
+    i++;
+    load_more_post = '/?page=' + i;
+    $.ajax({
+      method: "GET",
+      url: load_more_post,
+      dataType: 'html',
+    }).success(function(data){
+      $('.posts').append(data)
+    })
+  }
+});
