@@ -1,9 +1,11 @@
 class StaticPageController < ApplicationController
   before_action :set_post, only: [:home, :wall]
-  before_action :find_friend, only: [:home, :wall]
-  before_action :find_user, only: [:wall]
+  before_action :find_friendship, only: [:home, :wall]
+  before_action :find_user, only: [:wall, :home]
   def home
-    @posts = current_user.posts.limit(10)
+    friend_ids = User.get_friend_ids(current_user.id)
+    # @posts = current_user.posts.limit(10)
+    @posts = Post.where('user_id IN (?)', friend_ids).limit(50)
     @post = Post.new(user: current_user)
     @post.pictures.build
     @comments = @post.comments
@@ -21,9 +23,8 @@ class StaticPageController < ApplicationController
     @user = User.find_by(id: params[:id])
   end
 
-  def find_friend
-    @friend = current_user.user_requests.find_by(user_request: current_user.id)
-    @response = current_user.user_responses.find_by(user_response: current_user.id)
+  def find_friendship
+    @current_friendship = Friendship.by_requester_and_responser(current_user.id, params[:id])
   end
 
   def set_post

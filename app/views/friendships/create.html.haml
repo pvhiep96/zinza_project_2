@@ -1,4 +1,5 @@
-- user ||= @user
-= form_for Friendship.new do |f|
-  = f.hidden_field :user_response, value: user.id
-  = f.submit "Friend request"
+- if friendship.user_response != current_user.id
+  - user ||= @user
+  = form_for Friendship.new do |f|
+    = f.hidden_field :user_response, value: user.id
+    = f.submit "Friend request"

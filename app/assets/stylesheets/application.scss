@@ -168,6 +168,9 @@ body{
  width: 60px; 
 }
 
+.destroy-friend{
+  margin-left: 100px;
+}
 .new_like{
   position: absolute;
   width: 60px;
@@ -204,6 +207,55 @@ body{
 
 .request-area{
   position: absolute;
-  width: 60px;
+  width: 100px;
   margin-left: 100px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
+
+.request-area li{
+  list-style: none;
+  margin-bottom: 70px;
+}
+
+.request-area .option-response{
+  display: none;
+}
+
+
+// span.glyphicon-remove-circle{
+//   width: 50px;  
+// }
+
+.glyphicon-remove-circle:before{
+  color: red;
+  font-size: 20px;
+  position: absolute;
+}
+
+.glyphicon-ok-circle:before{
+  color: green;
+  position: absolute;
+  font-size: 20px;
+  margin-left: 50px;
+}
+
+// .glyphicon-ok-circle{
+//   margin-top: -5px;
+//   width: 50px;
+// }
+.destroy-friend{
+  position: absolute;
+}
+.accept-friend{
+  position: absolute;
+}
+
+#new_friendship input{
+  margin-left: -3px;
+}
+
+ul.stat li{
+  width: 40px;
 }

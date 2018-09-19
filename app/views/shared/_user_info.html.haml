@@ -4,6 +4,7 @@
     %a
       %span.name Friend
       %span.count
+        = current_user.user_responses.where(status: "accept").count
   %li
     %a
       %span.name Post
