@@ -118,7 +118,9 @@ span.picture {
   margin-left: 110px;
   background-color: #EEF0F3;
   border-radius: 5px;
-  width: 60%;
+  max-width: 60%;
+  word-wrap: break-word;
+  width: max-content;
 }
 .edit_delete{
   font-size: 10px;
