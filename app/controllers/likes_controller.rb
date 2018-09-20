@@ -42,6 +42,7 @@ class LikesController < ApplicationController
 
   def find_post
     @post = Post.find(params[:post_id])
+    return 'shared/_404' if @post.nil?
   end
 
   def find_react

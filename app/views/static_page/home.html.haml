@@ -1,3 +1,5 @@
+.hide-share
+.hide-post
 .container
   .row
     %aside.col-md-3
@@ -20,55 +22,116 @@
       %section.post_form
         = render 'shared/post_form'
     .col-md-9.posts
-      - @posts.each do |post|
-        .avatar-area 
-          = image_tag post.user.avatar.url
-        .option-area
-          .option
-            %span.option_item
-            %span.option_item
-            %span.option_item
-          .option-menu
-            %li 
-              .destroy-post{'data-id': "#{post.id}" } Delete
-            %li
-              .edit-post{'data-id': "#{post.id}" } Edit
-        %li.content_item
-          %span.content
-            %span.timestamp
-              = link_to post.user.name, wall_path(post.user.id)
-              
-            %span.content-area
-              = post.content
-            - post.pictures.each do |p|
-              = image_tag p.picture_url.url
-          .like-area
-            .like
-              - if post.likes.find_by(user: current_user).nil?
-                = form_for ([post, post.likes.build]) do |f|
-                  = f.button "", type: :submit , class: "fa fa-heart-o heart"
-                  = post.likes.count
-              - else
-                .destroy-like
-                  %i.fa.fa-heart-o.destroy-like-button{'data-id': "#{post.likes.find_by(user: current_user).id}", 'post-id': "#{post.id}"}
-                  = post.likes.count
-            %i.fa.fa-comments-o
-            = post.comments.count
-            - if post.comments.present?
-              .comment-area
-                - post.comments.each do |comment|
-                  %span.comment_item
-                    .avatar-comment-area 
-                      = image_tag comment.user.avatar.url
-                    .comment_detail
-                      = link_to comment.user.name, wall_path(comment.user.id)
-                      .comment-show-area
-                        %span= comment.content
-                      .edit_delete
-                        .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
-                        .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit
-                        .time-comment
-                          = time_ago_in_words(post.updated_at)
+      - @feed.each do |feed|
+        - @shares.each do |share|
+          - if share == feed
+            .option-area
+              .option
+                %span.option_item
+                %span.option_item
+                %span.option_item
+              .option-menu
+                - if feed.user.id == current_user.id
+                  %li 
+                    .destroy-share{'data-id': "#{share.id}", 'post-id': "#{share.post_id}" } Delete
+                  %li
+                    .edit-share{'data-id': "#{share.id}", 'post-id': "#{share.post_id}" } Edit
+            .avatar-area
+              = image_tag feed.user.avatar.url
+              %li.content_item{'post-id': "#{feed.id}"}
+                %span.content
+                  %span.timestamp
+                    = link_to share.user.name, wall_path(feed.user.id)
+                    -if feed.updated_at != feed.created_at
+                      edit at
+                      = time_ago_in_words(feed.updated_at)
+                      ago.
+                    - else
+                      share
+                      = time_ago_in_words(feed.updated_at)
+                  %span.content-area.content-react
+                    = feed.content
+                  .content-post-share
+                    - @post_shared = Post.find_by(id: feed.post_id)
+                    .avatar-post-shared
+                      = image_tag @post.user.avatar.url
+                    .info-post-shared
+                      %span.timestamp
+                        = link_to @post_shared.user.name, wall_path(@post_shared.user.id)
+                        -if feed.updated_at != @post_shared.created_at
+                          edit at
+                          = time_ago_in_words(@post_shared.updated_at)
                           ago.
-            = form_for ([post, post.comments.build]) do |f|
-              = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"
+                        - else
+                          = time_ago_in_words(@post_shared.updated_at)
+                    .content-post-shared
+                      = @post_shared.content
+                      - @post_shared.pictures.each do |p|
+                        = image_tag p.picture_url.url
+        - @posts.each do |post|
+          - if feed == post
+            .avatar-area 
+              = image_tag feed.user.avatar.url
+            .option-area
+              .option
+                %span.option_item
+                %span.option_item
+                %span.option_item
+              .option-menu
+                - if feed.user.id == current_user.id
+                  %li 
+                    .destroy-post{'data-id': "#{feed.id}" } Delete
+                  %li
+                    .edit-post{'data-id': "#{feed.id}" } Edit
+                %li
+                  .more-content{'data-id': "#{feed.id}"}
+                    = link_to "Show", post_path(feed)
+            %li.content_item{'post-id': "#{feed.id}"}
+              %span.content
+                %span.timestamp
+                  = link_to post.user.name, wall_path(feed.user.id)
+                  -if feed.updated_at != feed.created_at
+                    edit at
+                    = time_ago_in_words(feed.updated_at)
+                    ago.
+                  - else
+                    = time_ago_in_words(feed.updated_at)
+                %span.content-area
+                  = feed.content
+                - feed.pictures.each do |p|
+                  = image_tag p.picture_url.url
+              .like-area
+                .like
+                  - if feed.likes.find_by(user: current_user).nil?
+                    = form_for ([feed, feed.likes.build]) do |f|
+                      = f.button "", type: :submit , class: "fa fa-heart-o heart"
+                      = feed.likes.count
+                  - else
+                    .destroy-like
+                      %i.fa.fa-heart-o.destroy-like-button{'data-id': "#{feed.likes.find_by(user: current_user).id}", 'post-id': "#{feed.id}"}
+                      = feed.likes.count
+                .share               
+                  %i.glyphicon.glyphicon-share-alt{'data-id': "#{feed.id}"}
+                    = link_to '',new_post_share_path(post_id: feed.id)
+                  = post.shares.count
+                %i.fa.fa-comments-o
+                = feed.comments.count
+                - if post.comments.present?
+                  .comment-area
+                    - post.comments.each do |comment|
+                      %span.comment_item
+                        .avatar-comment-area 
+                          = image_tag comment.user.avatar.url
+                        .comment_detail
+                          = link_to comment.user.name, wall_path(comment.user.id)
+                          .comment-show-area
+                            %span= comment.content
+                          .edit_delete
+                            .destroy-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Delete
+                            .edit-comment{'data-id': "#{comment.id}", 'post-id': "#{post.id}" } Edit
+                            .time-comment
+                              = time_ago_in_words(post.updated_at)
+                              ago.
+                = form_for ([post, post.comments.build]) do |f|
+                  = f.text_field :content, placeholder: "Comment ...", class: "comment_textbox"
+          

@@ -259,3 +259,123 @@ body{
 ul.stat li{
   width: 40px;
 }
+
+.hide-post{
+  display: none;
+  position: fixed;
+  overflow: auto;
+  width: 100%;
+  z-index: 1;
+  height: 400px;
+}
+
+.post_detail .posts{
+  width: 600px !important;
+  margin-left: 340px;
+  margin-top: 100px;
+}
+
+.post_detail .posts .content_item{
+  width: 600px !important;
+}
+
+.share{
+  position: absolute;
+  margin-left: 242px;
+  margin-top: 0px;
+  font-size: 20px;
+  cursor: pointer;
+}   
+
+.glyphicon-share-alt{
+  border: none;
+  background-color: white;
+  font-size: 20px !important;
+}
+
+.share{
+  font-size: 15px;
+}
+
+.hide-share{
+  position: fixed;
+  overflow: auto;
+  width: 100%;
+  z-index: 1;
+  height: 400px;
+  padding-left: 400px;
+  padding-top: 100px;
+  display: none;
+}
+
+.form_share{
+  background-color: white;
+  padding-left: 70px;
+  padding-top: 20px;
+  border: solid 1px;
+  width: 65%;
+  border-radius: 5px;
+}
+
+.form_share li.content_item{
+  list-style: none;
+  border: solid 1px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.post_detail .close-view{
+  position: absolute;
+  margin-top: 100px;
+  margin-left: 1000px;
+}
+
+.post_detail .close-view span.glyphicon.glyphicon-remove{
+  font-size: 20px;
+  color: gray;
+  cursor: pointer;
+  position: absolute; 
+}
+
+.close-view-share{
+  font-size: 20px;
+  color: gray;
+  cursor: pointer;
+  position: absolute; 
+}
+.close-view-share span{
+  color: gray;
+  margin-left: 590px;
+  position: absolute; 
+}
+
+.content-post-share{
+  margin-left: 20px;
+  margin-top: 10px;
+  padding-left: 5 0px;
+  border: solid 1px #E2EAF0;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.avatar-post-shared img{
+  width: 40px !important;
+  position: absolute;
+  margin-left: 5px;
+  margin-top: -3px;
+}
+.info-post-shared{
+  margin-left: 50px;
+}
+
+.content-post-shared{
+  margin-left: 50px;
+}
+
+.content-post-shared img{
+  position: static;
+  height: 80%;
+  width: 80%;
+  border-radius: 0px;
+}

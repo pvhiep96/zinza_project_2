@@ -6,10 +6,14 @@
     %span.option_item
     %span.option_item
   .option-menu
-    %li 
-      .destroy-post{'data-id': "#{post.id}" } Delete
+    - if post.user.id == current_user.id
+      %li 
+        .destroy-post{'data-id': "#{@post.id}" } Delete
+      %li
+        .edit-post{'data-id': "#{@post.id}" } Edit
     %li
-      .edit-post{'data-id': "#{post.id}" } Edit
+      .more-content{'data-id': "#{@post.id}"}
+        = link_to "Show", post_path(@post)
 %li.content_item
   %span.content
     %span.timestamp

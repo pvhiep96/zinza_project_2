@@ -1,7 +1,12 @@
 %span.timestamp
   = link_to post.user.name
-  = time_ago_in_words(post.updated_at)
-  ago.
+  -if post.updated_at != post.created_at
+    edit at
+    = time_ago_in_words(post.updated_at)
+    ago.
+  - else
+    = time_ago_in_words(post.updated_at)
+    ago.
 = form_for @post do |f|
   = f.text_field :content, class: "edit_post"
   = f.fields_for :pictures do |p|
