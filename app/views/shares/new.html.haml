@@ -1,0 +1,34 @@
+.close-view-share
+  %span.glyphicon.glyphicon-remove
+.form_share
+  .avatar-area
+    = image_tag current_user.avatar.url
+  = form_for [@post, @post.shares.build] do |share|
+    = share.text_field :content, placeholder: "React this post..."
+  %li.content_item{'post-id': "#{@post.id}"}
+    .avatar-area
+      = image_tag @post.user.avatar.url
+    %span.content
+      %span.timestamp
+        = link_to @post.user.name, wall_path(@post.user.id)
+        = time_ago_in_words(@post.updated_at)
+      %span.content-area
+        = @post.content
+      - @post.pictures.each do |p|
+        = image_tag p.picture_url.url
+    .like-area
+      .like
+        - if @post.likes.find_by(user: current_user).nil?
+          = form_for ([@post, @post.likes.build]) do |f|
+            = f.button "", type: :submit , class: "fa fa-heart-o heart"
+            = @post.likes.count
+        - else
+          .destroy-like
+            %i.fa.fa-heart-o.destroy-like-button{'data-id': "#{@post.likes.find_by(user: current_user).id}", 'post-id': "#{@post.id}"}
+            = @post.likes.count
+        .share               
+          %i.glyphicon.glyphicon-share-alt{'data-id': "#{@post.id}"}
+            = link_to '',new_post_share_path(post_id: @post.id)
+          = @post.shares.count
+      %i.fa.fa-comments-o
+      = @post.comments.count

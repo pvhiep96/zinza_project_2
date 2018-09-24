@@ -48,10 +48,12 @@ class CommentsController < ApplicationController
 
   def find_post
     @post = Post.find(params[:post_id])
+    return 'shared/_404' if @post.nil?
   end
 
   def find_comment
     @comment = Comment.find_by(id: params[:id])
+    return 'shared/_404' if @comment.nil?    
   end
 
   def comment_params

@@ -40,8 +40,13 @@ $(document).ready(function(){
 
   $(".view-react").css({"display": "none"})
 
+  $('.hide-post').css({"display": "none"})
+
+  $('.hide-share').css({"display": "none"})
+
   $(".comment-area").css({"display": "none"})
 
+  $('.form_share').css({'display':'none'})
   $(document).on('click', '.request-area', function(){
     $(this).find('.option-response').show()
   })
@@ -50,7 +55,30 @@ $(document).ready(function(){
     var subject = $(".option-response");
     if(e.target.class != subject.attr("class")){
       subject.hide();
+     
     }
+  })
+
+  // close view post
+  $(document).on('click','.close-view span', function(e){
+    debugger
+    $('.container').css({'opacity':'1'});
+    $('body').css({'overflow':'scroll'})
+    $('.hide-share').css({'display':'none'})
+    $(this).closest('.close-view').next().css({'display':'none'})
+    $(this).css({'display':'none'})
+    $(this).closest('.hide-post').css({'display':'none'})
+  })
+
+  // close view share
+  $(document).on('click','.close-view-share span', function(e){
+    debugger
+    $('.container').css({'opacity':'1'});
+    $('body').css({'overflow':'scroll'})
+    $('.hide-share').css({'display':'none'})
+    $(this).closest('.close-view').next().css({'display':'none'})
+    $(this).css({'display':'none'})
+    $(this).closest('.hide-share').css({'display':'none'})
   })
 
   $(document).on('click', ".option", function() {
@@ -257,7 +285,6 @@ $(document).ready(function(){
   // like
   $(document).on('submit', ".new_like", function(e){
     e.preventDefault();
-    debugger
     var action = $(this).attr('action');
     var method = $(this).attr('method');
     $.ajax({
@@ -356,9 +383,99 @@ $(document).ready(function(){
       
     }.bind(this))
   })
+
+  // show post 
+  $(document).on('click', '.more-content a', function(e){
+    e.preventDefault();
+    post_id = $(this).parent().data('id')
+    $.ajax({
+      url: window.location.origin +"/posts/" + post_id,
+      method: 'get',
+      dataType: 'html'
+    }).success(function(data){
+      $('.hide-post').html(data);
+      $('body').css({'overflow':'hidden'})
+      $('.hide-post').show()
+      $('.container').css({'opacity':'0.1'})
+    }.bind(this))
+  })
+
+  // show form share
+  $(document).on('click', '.glyphicon-share-alt', function(e){
+    e.preventDefault();
+    var url = $(this).find('a').attr('href')
+    $.ajax({
+      url: url,
+      method: 'get',
+      dataType: 'html',
+    }).success(function(data){
+      $('.hide-share').html(data)
+      $('.hide-share').show()
+      $('.container').css({'opacity':'0.1'})
+      $('body').css({'overflow':'hidden'})
+    })
+  })
+
+  // share
+  $(document).on('submit', '.new_share', function(e){
+    debugger
+    e.preventDefault();
+    action = $(this).attr('action')
+    method = $(this).attr('method')
+    content = $(this).find(`input[name='share[content]']`).val()
+    $.ajax({
+      url: action,
+      method: method,
+      data: {share: {content: content}}
+    })
+  })
+
+  // destroy share
+  $(document).on('click', '.destroy-share', function(e){
+    e.preventDefault()
+    share_id = $(this).data('id')
+    post_id = $(this).attr('post-id')
+    $.ajax({
+      url: window.location.origin + '/posts/' + post_id + '/shares/' + share_id,
+      method: "DELETE",
+      dataType: 'html',
+    }).success(function(data){
+      $(this).closest('.option-area').next('.avatar-area').css({'display':'none'})
+    }.bind(this))
+  })
 });
 
-//scroll
+// edit share
+  $(document).on('click', '.edit-share', function(e){
+    debugger
+    e.preventDefault()
+    share_id = $(this).data('id')
+    post_id = $(this).attr('post-id')
+    $.ajax({
+      url: window.location.origin + '/posts/' + post_id + '/shares/' + share_id + '/edit',
+      method: 'get',
+      dataType: 'html'
+    }).success(function(data){
+      $(this).closest('.option-area').next('.avatar-area').find('.content-react').html(data)
+    }.bind(this))
+  })
+
+// update share
+  $(document).on('submit', '.edit_share', function(e){
+    e.preventDefault()
+    content = $(this).find('input.edit_post').val()
+    action = $(this).attr('action')
+    $.ajax({
+      url: action,
+      method: 'put',
+      data: {share: {content: content}},
+      dataType: 'json',
+    }).success(function(data){
+      $(this).html("<span>"+data.content+"</span>")
+    }.bind(this))
+  })
+
+// infinity scroll
 var i = 1;
 $(window).scroll(function() {
   if($(window).scrollTop() + $(window).height() == $(document).height()) {

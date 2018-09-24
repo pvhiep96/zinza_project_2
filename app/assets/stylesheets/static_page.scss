@@ -169,3 +169,22 @@ button.heart{
   font-weight: bold;
   color: black;
 }
+
+.form_share{
+  border: none !important;
+  padding-bottom: 25px;
+}
+
+.form_share .avatar-area img{
+  margin-left: -60px !important;
+  margin-top: -10px !important;
+}
+
+.form_share .content_item{
+  padding-left: 60px !important;
+}
+
+.form_share .content_item .avatar-area img{
+  margin-left: -55px !important;
+  margin-top: 5px !important;
+}
