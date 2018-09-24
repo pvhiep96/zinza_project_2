@@ -1,6 +1,10 @@
 .hide-share
 .hide-post
 .container
+  .search_result
+    - @search_user.each do |user|
+      %li
+        = user.name
   .row
     %aside.col-md-3
       %section.user_info

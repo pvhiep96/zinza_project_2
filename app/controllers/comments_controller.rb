@@ -1,23 +1,23 @@
+# frozen_string_literal: true
+
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_post, only: [:create, :edit, :update]
-  before_action :find_comment, only: [:destroy, :edit, :update]
-  def new
-  end
+  before_action :find_post, only: %i[create edit update]
+  before_action :find_comment, only: %i[destroy edit update]
+  def new; end
 
-  def show
-  end
+  def show; end
 
   def create
     @comment = @post.comments.create(comment_params)
     @comment.user_id = current_user.id
     @comment.save
-    user_name = @comment.user.name
+    # user_name = @comment.user.name
     respond_to do |format|
       format.js
       # format.json { render json: @comment.to_json(only: [:content], include: [user: {only:[:name]}])}
       format.html do
-        render '_comment', layout: false, locals: {comment: @comment, post: @post} 
+        render '_comment', layout: false, locals: { comment: @comment, post: @post }
       end
     end
   end
@@ -26,13 +26,13 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render 'edit', layout: false, locals: {comment: @comment, post: @post}
+        render 'edit', layout: false, locals: { comment: @comment, post: @post }
       end
     end
   end
 
   def update
-    @comment.update_attributes (comment_params)
+    @comment.update_attributes comment_params
     respond_to do |format|
       format.js
       format.json { render json: @comment.to_json(only: [:content]) }
@@ -41,10 +41,10 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment.destroy
-    render json: @comment.to_json, include: [post: {only:[:id]}]
+    render json: @comment.to_json, include: [post: { only: [:id] }]
   end
 
-  private 
+  private
 
   def find_post
     @post = Post.find(params[:post_id])
@@ -53,7 +53,7 @@ class CommentsController < ApplicationController
 
   def find_comment
     @comment = Comment.find_by(id: params[:id])
-    return 'shared/_404' if @comment.nil?    
+    return 'shared/_404' if @comment.nil?
   end
 
   def comment_params

@@ -51,6 +51,12 @@ $(document).ready(function(){
     $(this).find('.option-response').show()
   })
 
+  $(document).on('submit', '.user_search', function(e){
+    debugger
+    $(this).find('.form-control').val('')
+    $(this).closest('.container-fluid').next('.container').find('search_result').css({'display':'block'})
+  })
+
   $(".container").mouseup(function(e){
     var subject = $(".option-response");
     if(e.target.class != subject.attr("class")){

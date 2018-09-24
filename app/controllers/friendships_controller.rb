@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class FriendshipsController < ApplicationController
   before_action :find_user, only: [:create]
-  before_action :find_friendship, only: [:destroy, :update]
+  before_action :find_friendship, only: %i[destroy update]
 
   def create
     @friend = current_user.user_requests.build(friend_params)
@@ -8,7 +10,7 @@ class FriendshipsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render 'destroy', layout: false, locals: {friendship: @friend}
+        render 'destroy', layout: false, locals: { friendship: @friend }
       end
     end
   end
@@ -26,13 +28,13 @@ class FriendshipsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render 'create', layout: false, locals: {friendship: @friendship, user: @friendship.responser} 
+        render 'create', layout: false, locals: { friendship: @friendship, user: @friendship.responser }
       end
     end
   end
 
   private
-  
+
   def find_friendship
     @friendship = Friendship.find_by(id: params[:id])
   end
@@ -44,5 +46,4 @@ class FriendshipsController < ApplicationController
   def find_user
     @user = User.find_by(id: params[:id])
   end
-
 end
