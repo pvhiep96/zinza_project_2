@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
-  before_action :user_signed_in?, only: [:destroy, :create]
-  before_action :set_post, only: [:destroy, :show, :edit, :update]
+  before_action :user_signed_in?, only: %i[destroy create]
+  before_action :set_post, only: %i[destroy show edit update]
   before_action :find_user, only: [:show]
   def index
     @post = Post.all
   end
-  
+
   def show
-    render 'show', layout: false, locals: {post: @post} 
+    render 'show', layout: false, locals: { post: @post }
   end
 
   def edit
     respond_to do |format|
       format.js
       format.html do
-        render 'edit', layout: false, locals: {post: @post} 
+        render 'edit', layout: false, locals: { post: @post }
       end
     end
   end
@@ -25,7 +27,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.js
       format.html do
-        render '_post', layout: false, locals: {post: @post} 
+        render '_post', layout: false, locals: { post: @post }
       end
     end
   end
@@ -35,7 +37,7 @@ class PostsController < ApplicationController
     respond_to do |f|
       f.js
       f.html do
-        render 'post_form', layout: false, locals: {post: @post} 
+        render 'post_form', layout: false, locals: { post: @post }
       end
       # f.json { render json: @post.to_json(only: [:content])}
       # format.json { render json: @comment.to_json(only: [:content], include: [user: {only:[:name]}])}
@@ -48,7 +50,7 @@ class PostsController < ApplicationController
   end
 
   def post_show
-    render 'post_show', layout: false, locals: {post: @post} 
+    render 'post_show', layout: false, locals: { post: @post }
   end
 
   private
@@ -57,14 +59,13 @@ class PostsController < ApplicationController
     @post = Post.find_by(id: params[:id])
     return 'shared/_404' if @post.nil?
   end
-  
+
   def post_params
     params.require(:post).permit(:content, pictures_attributes: %i[id picture_url _destroy])
   end
-  
+
   def find_user
     @user = User.find_by(id: params[:id])
     return 'shared/_404' if @user.nil?
   end
-  
 end

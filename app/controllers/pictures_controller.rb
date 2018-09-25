@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class PicturesController < ApplicationController
   before_action :find_picture, only: [:destroy]
-  def update
-  end
+  def update; end
 
   def destroy
     @picture.destroy
@@ -15,6 +16,7 @@ class PicturesController < ApplicationController
   end
 
   private
+
   def find_picture
     @picture = Picture.find_by(id: params[:id])
   end

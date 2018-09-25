@@ -6,7 +6,9 @@
         %ul.nav.nabar-nav.navbar-left
           %li
             %span.home= link_to "Home", root_path,class: "btn btn-link"
-          %li.search Search
+          %li.search
+            = search_form_for @q,url: root_path do |f|
+              = f.text_field :name_cont, placeholder: "enter name", class: "form-control"
         %ul.nav.navbar-nav.navbar-right
           %li
             %span.user_name= link_to current_user.name, edit_user_registration_path,class: "btn btn-link"
